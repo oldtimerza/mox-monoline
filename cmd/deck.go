@@ -41,7 +41,7 @@ var deckCmd = &cobra.Command{
 			textContents := string(data)
 			cards := strings.Split(textContents, "\r\n")
 			// var total int32 = 0
-			fmt.Println("card,Store1,Price1,Store2,Price2,Store3,Price3")
+			fmt.Println("card;Store1;Price1;Store2;Price2;Store3;Price3")
 			for i := 0; i < len(cards); i++ {
 				cardNameData := api.FuzzySearchCardNames(cards[i])
 				cheapestCard, secondCheapestCard, thirdCheapestCard := api.FindCheapestCardAtRetailers(cardNameData.Cards[0].Id, stores)
