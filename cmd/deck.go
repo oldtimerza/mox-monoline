@@ -47,20 +47,20 @@ var deckCmd = &cobra.Command{
 				cheapestCard, secondCheapestCard, thirdCheapestCard := api.FindCheapestCardAtRetailers(cardNameData.Cards[0].Id, stores)
 				var printoutCard string = cards[i]
 				if cheapestCard != nil {
-					printoutCard += "," + cheapestCard.Retailer_name + "," + fmt.Sprint(cheapestCard.Price/100.00)
+					printoutCard += ";" + cheapestCard.Retailer_name + ";" + fmt.Sprint(cheapestCard.Price/100.00)
 					// total += cheapestCard.Price
 				} else {
-					printoutCard += ",,"
+					printoutCard += ";;"
 				}
 				if secondCheapestCard != nil {
-					printoutCard += "," + secondCheapestCard.Retailer_name + "," + fmt.Sprint(secondCheapestCard.Price/100.00)
+					printoutCard += ";" + secondCheapestCard.Retailer_name + ";" + fmt.Sprint(secondCheapestCard.Price/100.00)
 				} else {
-					printoutCard += ",,"
+					printoutCard += ";;"
 				}
 				if thirdCheapestCard != nil {
-					printoutCard += "," + thirdCheapestCard.Retailer_name + "," + fmt.Sprint(thirdCheapestCard.Price/100.00)
+					printoutCard += ";" + thirdCheapestCard.Retailer_name + ";" + fmt.Sprint(thirdCheapestCard.Price/100.00)
 				} else {
-					printoutCard += ",,"
+					printoutCard += ";;"
 				}
 				fmt.Println(printoutCard)
 			}
