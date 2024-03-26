@@ -9,14 +9,19 @@ permissions:
     packages: write
 
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
+  releases-matrix:
+    name: Release Go Binary
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
+        goos: [windows]
+        goarch: ["386"]
     steps:
     - uses: actions/checkout@v4
     - uses: wangyoucao577/go-release-action@v1
       with:
-        binary_name: "mox-monoline"
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: windows
-        goarch: "386"
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        binary_name: "mox-monoline"
