@@ -81,5 +81,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	deckCmd.Flags().StringVar(&stores, "stores", "all", "the stores you wish to search")
+	deckCmd.Flags().StringVar(&stores, "stores", "all", "comma seperated list of stores you wish to search e.g. --stores=TopDeck,Dracoti")
 }
