@@ -12,11 +12,13 @@ import (
 	"strings"
 )
 
+var stores string
+
 // deckCmd represents the deck command
 var deckCmd = &cobra.Command{
 	Use:   "deck",
 	Short: "Fetches the cheapest available card for each card in a given decklist",
-	Long:  `e.g. mox-monoline deck "/path/to/decklist.txt"`,
+	Long:  `e.g. mox-monoline deck --stores=Topdeck "/path/to/decklist.txt"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Missing decklist argument. Must not be blank")
@@ -38,18 +40,31 @@ var deckCmd = &cobra.Command{
 		if data != nil {
 			textContents := string(data)
 			cards := strings.Split(textContents, "\r\n")
-			var total int32 = 0
+			// var total int32 = 0
+			fmt.Println("card,Store1,Price1,Store2,Price2,Store3,Price3")
 			for i := 0; i < len(cards); i++ {
 				cardNameData := api.FuzzySearchCardNames(cards[i])
-				cheapestCard := api.FindCheapestCardAtRetailers(cardNameData.Cards[0].Id)
+				cheapestCard, secondCheapestCard, thirdCheapestCard := api.FindCheapestCardAtRetailers(cardNameData.Cards[0].Id, stores)
+				var printoutCard string = cards[i]
 				if cheapestCard != nil {
-					fmt.Println(cards[i] + " - " + cheapestCard.Retailer_name + " - " + cheapestCard.PriceRead)
-					total += cheapestCard.Price
+					printoutCard += "," + cheapestCard.Retailer_name + "," + fmt.Sprint(cheapestCard.Price/100.00)
+					// total += cheapestCard.Price
 				} else {
-					fmt.Println(cards[i] + " - Card not available")
+					printoutCard += ",,"
 				}
+				if secondCheapestCard != nil {
+					printoutCard += "," + secondCheapestCard.Retailer_name + "," + fmt.Sprint(secondCheapestCard.Price/100.00)
+				} else {
+					printoutCard += ",,"
+				}
+				if thirdCheapestCard != nil {
+					printoutCard += "," + thirdCheapestCard.Retailer_name + "," + fmt.Sprint(thirdCheapestCard.Price/100.00)
+				} else {
+					printoutCard += ",,"
+				}
+				fmt.Println(printoutCard)
 			}
-			fmt.Printf("Total: R%d (+- ??? cards)", total/100)
+			// fmt.Printf("Total: R%d (+- ??? cards)", total/100)
 		}
 
 	},
@@ -66,5 +81,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// deckCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	deckCmd.Flags().StringVar(&stores, "stores", "all", "the stores you wish to search")
 }
